@@ -1,16 +1,18 @@
-n=int(input())
-distance=list(map(int,input().split()))
-price=list(map(int,input().split()))
+n = int(input())
+roads = list(map(int, input().split()))
+costs = list(map(int, input().split()))
 
-d=0
-last=price[-2]
-total=0
-
-for i in range(len(price)-2,-1,-1):
-  if last>=price[i]:
-    last=price[i]
-for i in range(price.index(last)):
-  d+=distance[i]
-
-total+=(price[0]*d+last*(sum(distance)-d))
-print(total)
+res = roads[0] * costs[0]
+m = costs[0]
+dist = 0
+for i in range(1, n-1):
+    if costs[i] < m:
+        res += m*dist
+        dist = roads[i]
+        m = costs[i]
+    else:
+        dist += roads[i]
+        
+    if i == n-2:
+        res += m*dist
+print(res)
