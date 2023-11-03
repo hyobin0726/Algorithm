@@ -1,7 +1,8 @@
-n=int(input())
+import sys
+n=int(sys.stdin.readline())
 a=[]
 for i in range(n):
-  x,y=map(int,input().split())
+  x,y=map(int,sys.stdin.readline().split())
   a.append((x,y))
 
   
