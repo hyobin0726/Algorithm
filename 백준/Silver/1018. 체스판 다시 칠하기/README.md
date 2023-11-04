@@ -29,4 +29,5 @@
 ### 출력 
 
  <p>첫째 줄에 지민이가 다시 칠해야 하는 정사각형 개수의 최솟값을 출력한다.</p>
+![image](https://github.com/hyobin0726/codingtest/assets/140376727/4d6f1b5b-ac11-4bc5-99b3-33e2523c4f25)
 
