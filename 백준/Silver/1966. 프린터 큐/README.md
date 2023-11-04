@@ -38,3 +38,6 @@
  <p>각 테스트 케이스에 대해 문서가 몇 번째로 인쇄되는지 출력한다.</p>
 ![1](https://github.com/hyobin0726/codingtest/assets/140376727/74e3114e-a097-4656-9d64-517056f11519)
 
+![image](https://github.com/hyobin0726/codingtest/assets/140376727/91eb792a-d0ae-48d7-8a1f-792b4875d1f3)
+
+
