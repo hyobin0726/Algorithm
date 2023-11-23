@@ -26,6 +26,5 @@
 
  <p>첫째 줄에는 그림의 개수, 둘째 줄에는 그 중 가장 넓은 그림의 넓이를 출력하여라. 단, 그림이 하나도 없는 경우에는 가장 넓은 그림의 넓이는 0이다.</p>
 
-![image](https://github.com/hyobin0726/codingtest/assets/140376727/adf0d537-9b07-4c9c-b883-00eb74851e6a)  
-
+![image](https://github.com/hyobin0726/codingtest/assets/140376727/846f4865-571c-436c-a750-f1e15d1615a6)  
 
