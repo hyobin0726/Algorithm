@@ -70,5 +70,6 @@
 
  <p>첫째 줄에 얻을 수 있는 안전 영역의 최대 크기를 출력한다.</p>
 
-![image](https://github.com/hyobin0726/Algorithm/assets/140376727/fac241cb-ef9d-4617-b057-1382fd6d42e7)
+![image](https://github.com/hyobin0726/Algorithm/assets/140376727/3b6b3964-8519-4e6f-9b1d-c2e2d01ab7ea)
+
 
