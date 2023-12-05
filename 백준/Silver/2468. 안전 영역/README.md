@@ -158,3 +158,5 @@
 
  <p>첫째 줄에 장마철에 물에 잠기지 않는 안전한 영역의 최대 개수를 출력한다.</p>
 
+![image](https://github.com/hyobin0726/Algorithm/assets/140376727/c5f6063b-8c60-41ef-a25a-40d23bcc4720)
+
