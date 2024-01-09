@@ -1,18 +1,17 @@
+import sys
+input=sys.stdin.readline
 n=int(input())
-time=[]
-for i in range(n):
-  s, e = map(int,input().split())
-  time.append([s,e])
+conference=[]
+for i in range (n):
+    conference.append(list(map(int,input().split())))
+conference.sort(key=lambda x : (x[1],x[0]))
 
+count=1
+start=conference[0][0]
+end=conference[0][1]
 
-time.sort(key=lambda x: x[0])
-time.sort(key=lambda x: x[1])
-
-last=0
-count=0
-for i,j in time:
-  if i>=last:
-    count+=1
-    last=j
-
+for i in range(1,n):
+    if end <= conference[i][0]:
+        count+=1
+        end=conference[i][1]
 print(count)
