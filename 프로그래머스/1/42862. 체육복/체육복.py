@@ -1,19 +1,21 @@
 def solution(n, lost, reserve):
-    student = []
+    answer = 0
     lost.sort()
     reserve.sort()
-    for i in range(1, n+1):
-        student.append(i)
-        if i in lost:
-            student.remove(i)
-            if i in reserve:
-                student.append(i)
-                reserve.remove(i)
-                lost.remove(i)
+    
+    
+    n_lost=[]
+    n_reserve=[]
     for i in lost:
-        for j in reserve:
-            if abs(i-j) == 1:
-                student.append(j)
-                reserve.remove(j)
-                break
-    return len(student)
+        if i not in reserve:
+            n_lost.append(i)
+    for i in reserve:
+        if i not in lost:
+            n_reserve.append(i)
+    answer=n-len(n_lost)
+    for i in n_lost:
+        for j in n_reserve:
+            if abs(i-j)==1:
+                n_reserve.remove(j)
+                answer+=1
+    return answer
