@@ -1,58 +1,45 @@
-import java.io.*;
-import java.util.*;
 
+import java.util.*;
+import java.io.*;
 public class Main {
     static int n;
-    static ArrayList<Integer> arr = new ArrayList<>();
-    static ArrayList<Character> op = new ArrayList<>();
-    static int total = Integer.MIN_VALUE;
-
-    public static void main(String[] args) throws IOException{
+    static int[] num;
+    static char[] op;
+    static int max = Integer.MIN_VALUE;
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        n= Integer.parseInt(br.readLine());
-        String input = br.readLine();
-
-        for (int i =0; i <n; i++){
-            char a = input.charAt(i);
-            if ( i%2 == 0){
-                arr.add(a - '0');
-            }else {
-                op.add(a);
-            }
+        n = Integer.parseInt(br.readLine()); // 수식의 길이
+        String s = br.readLine(); // 수식
+        num = new int[n/2+1]; // 수식의 숫자
+        op = new char[n/2]; // 수식의 연산자
+        int idx = 0;
+        for(int i=0; i<n; i++) {
+            if(i%2==0) num[idx++] = s.charAt(i)-'0';
+            else op[idx-1] = s.charAt(i);
         }
+        dfs(0, num[0]);
+        System.out.println(max);
 
-        dfs(arr.get(0),0);
-        System.out.println(total);
     }
-    static void dfs(int temp,  int cnt){
-        //연산자 모두 사용한 경우
-        if (cnt == op.size()){
-            total = Math.max(total,temp);
+    static void dfs(int idx, int ans){
+        if(idx == n/2) {
+            // 최대값 갱신
+            max = Math.max(max, ans);
             return;
         }
-        // 순서대로 계산 한 경우
-        int resul1  = sum(temp, arr.get(cnt+1),op.get(cnt));
-        dfs(resul1 ,cnt+1);
-        // 다음 연산자(괄호 친 경우) 계산 한 경우
-        if (cnt+1 <op.size()) {
-            int resul2 = sum(arr.get(cnt+1), arr.get(cnt+2),op.get(cnt+1));
-            int result3 = sum(temp, resul2, op.get(cnt));
-            dfs(result3, cnt + 2);
+
+        dfs(idx+1, calc(ans, num[idx+1], op[idx]));
+        if(idx+1<n/2) {
+            int temp = calc(num[idx+1], num[idx+2], op[idx+1]);
+            int result = calc(ans, temp, op[idx]);
+            dfs(idx+2, result);
         }
+
     }
-    static int sum(int a,int b, char oper) {
-        int temp = 0;
-        switch (oper) {
-            case '+' :
-              temp= a+b;
-               break;
-            case '-' :
-                temp= a-b;
-                break;
-            case '*':
-                temp=a*b;
-                break;
-        }
-        return temp;
+
+    static int calc(int a, int b, char op) {
+        if(op=='+') return a+b;
+        else if(op=='-') return a-b;
+        else return a*b;
     }
 }
