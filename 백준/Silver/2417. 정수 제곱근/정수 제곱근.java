@@ -1,4 +1,3 @@
-
 import java.io.*;
 public class Main {
     public static void main(String[] args) throws IOException{
@@ -17,8 +16,9 @@ public class Main {
                 return;
             }
             else if(n < Math.pow(mid, 2) ){
-                answer =mid;
+                
                 end =mid-1;
+                answer =mid;
             }else {
                 start = mid+1;
             }
