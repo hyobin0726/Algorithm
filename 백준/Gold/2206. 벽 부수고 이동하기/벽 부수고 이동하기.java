@@ -2,82 +2,83 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static class Loc{
-        int i;
-        int j;
-        int cnt;
-        boolean destroyed;
+    static int n, m;
+    static int[][] map;
+    static boolean[][][] visited;
+    static int[] dx = {1, -1, 0, 0};
+    static int[] dy = {0, 0, 1, -1};
 
-        public Loc(int i, int j, int cnt, boolean d) {
-            this.i = i;
-            this.j = j;
-            this.cnt = cnt;
-            this.destroyed = d;
+    static class wall{
+        int x,y,sum;
+        boolean destroy;
+
+        public wall(int x, int y, int sum, boolean destroy) {
+            this.x = x;
+            this.y = y;
+            this.sum = sum;
+            this.destroy = destroy;
         }
     }
 
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String[] inputs = br.readLine().split(" ");
-
-        int n = Integer.parseInt(inputs[0]);
-        int m = Integer.parseInt(inputs[1]);
-
-        char[][] map = new char[n][m];
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
+        map = new int[n][m];
         for (int i = 0; i < n; i++) {
-            String input = br.readLine();
+            String str = br.readLine();
             for (int j = 0; j < m; j++) {
-                map[i][j] = input.charAt(j);
+                map[i][j] = str.charAt(j) - '0';
+
             }
         }
+        bfs();
+    }
 
-
-        Queue<Loc> q = new LinkedList<>();
-        q.add(new Loc(0, 0, 1, false));
-
-        int[] mi = {0, 0, -1, 1};
-        int[] mj = {-1, 1, 0, 0};
-
-        boolean[][][] visited = new boolean[n][m][2];
+    static void bfs() {
+        Queue<wall> q = new LinkedList<>();
+        //x,y,칸이동수, 벽부신여부
+        q.add(new wall (0, 0, 1,false));
+        visited = new boolean[n][m][2];
+        visited[0][0][0] = true;
 
         while (!q.isEmpty()) {
-            Loc now = q.poll();
-
-            if (now.i == n - 1 && now.j == m - 1) {
-                System.out.println(now.cnt);
+            wall temp = q.poll();
+            if (temp.x == n - 1 && temp.y == m - 1) {
+                System.out.println(temp.sum);
                 return;
             }
 
-            for (int d = 0; d < 4; d++) {
-                int ni = now.i + mi[d];
-                int nj = now.j + mj[d];
+            for (int i = 0; i < 4; i++) {
+                int nx = temp.x + dx[i];
+                int ny = temp.y + dy[i];
 
-                if(ni<0 || ni>=n || nj<0 || nj>=m) continue;
-
-                int next_cnt = now.cnt+1;
-
-                if(map[ni][nj]=='0'){ // 벽이 아니면
-                    if(!now.destroyed && !visited[ni][nj][0]) { // 부신 벽이 여태까지 없었으면
-                        q.add(new Loc(ni, nj, next_cnt, false));
-                        visited[ni][nj][0] = true;
-                    }else if(now.destroyed && !visited[ni][nj][1]){ // 벽을 한번 부신 적이 있으면
-                        q.add(new Loc(ni, nj, next_cnt, true));
-                        visited[ni][nj][1] = true;
+                if (nx >= 0 && nx < n && ny >= 0 && ny < m ){
+                    //벽아닌경우
+                    if(map[nx][ny] == 0){
+                        //부신적이 없다면
+                        if(!temp.destroy && !visited[nx][ny][0]){
+                            q.add(new wall(nx,ny,temp.sum+1, false));
+                            visited[nx][ny][0] = true;
+                        //부신적이 있다면
+                        }else if(temp.destroy && !visited[nx][ny][1]){
+                            q.add(new wall(nx,ny, temp.sum+1, true));
+                            visited[nx][ny][1] =true;
+                        }
                     }
-
-                }else if(map[ni][nj]=='1'){ // 벽이면
-
-                    if(!now.destroyed){ // 한번도 벽을 부순적이 없다면 부순다~
-                        q.add(new Loc(ni, nj, next_cnt, true));
-                        visited[ni][nj][1] = true;
+                    //벽인경우
+                    else {
+                        //한번도 부신적이없다면
+                        if(!temp.destroy){
+                            //이제부터 true 부신상태로 돌아감
+                            q.add(new wall(nx,ny,temp.sum+1, true));
+                            visited[nx][ny][1] =true;
+                        }
                     }
-                    // 한번 부순 적이 있다면 또 부수고 갈 수 없기 때문에 pass
                 }
             }
-
         }
-
         System.out.println(-1);
     }
 }
