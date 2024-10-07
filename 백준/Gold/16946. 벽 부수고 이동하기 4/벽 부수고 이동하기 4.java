@@ -54,12 +54,21 @@ public class Main {
                 }
             }
         }
-        for(int i=0; i<n; i++){
-            for(int j=0; j<m; j++){
-                System.out.print(result[i][j]);
+       // for(int i=0; i<n; i++){
+       //     for(int j=0; j<m; j++){
+       //         System.out.print(result[i][j]);
+       //     }
+       //     System.out.println();
+       // }
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                sb.append(result[i][j]);
             }
-            System.out.println();
+            sb.append("\n");
         }
+
+        System.out.println(sb);
 
     }
     static int bfs(int x, int y, int idx){
