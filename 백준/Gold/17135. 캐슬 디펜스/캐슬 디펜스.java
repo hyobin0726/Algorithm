@@ -48,7 +48,9 @@ public class Main {
 
             // 맵 복원
             for (int i = 0; i < n; i++) {
-                System.arraycopy(copy[i], 0, map[i], 0, m);
+                for(int j=0; j<m; j++){
+                    map[i][j] =copy[i][j];
+                }
             }
             return;
         }
