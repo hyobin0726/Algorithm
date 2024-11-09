@@ -1,86 +1,90 @@
-import java.io.IOException;
-import java.util.*;
 import java.io.*;
+import java.util.*;
+
 public class Main {
-
     static int n;
-    static int[] population, area;
+    static int[] people;
     static ArrayList<Integer>[] list;
-    static int min = Integer.MAX_VALUE;
     static boolean[] visited;
-
+    static boolean[] combi;
+    static int ans= Integer.MAX_VALUE;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        n = Integer.parseInt(br.readLine());
+        StringTokenizer st;
 
-        population = new int[n + 1];
-        list = new ArrayList[n + 1];
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        for(int i = 1; i <= n; i++) {
+        n = Integer.parseInt(br.readLine());
+        people = new int[n+1];
+        st = new StringTokenizer(br.readLine());
+        for(int i=1; i<=n; i++){
+            people[i] = Integer.parseInt(st.nextToken());
+        }
+        list = new ArrayList[n+1];
+        for(int i=0; i<=n; i++){
             list[i] = new ArrayList<>();
-            population[i] = Integer.parseInt(st.nextToken());
         }
 
-        for(int i = 1; i <= n; i++) {
+        for(int i=1; i<=n; i++){
             st = new StringTokenizer(br.readLine());
             int num = Integer.parseInt(st.nextToken());
-            for(int j = 0; j < num; j++) {
-                list[i].add(Integer.parseInt(st.nextToken()));
+            for(int j=0; j<num; j++){
+                int temp = Integer.parseInt(st.nextToken());
+                list[i].add(temp);
             }
         }
-
-        area = new int[n + 1];
-        dfs(1);
-
-        if(min == Integer.MAX_VALUE) System.out.println("-1");
-        else System.out.println(min);
+        combi = new boolean[n+1];
+        dfs(1, combi, 1);
+        if(ans == Integer.MAX_VALUE){
+            System.out.println(-1);
+        }else {
+            System.out.println(ans);
+        }
     }
-
-    public static void dfs(int k) {
-        if(k == n + 1) {
-            int area1 = 0;
-            int area2 = 0;
-            for(int i = 1; i <= n; i++) {
-                if(area[i] == 1) area1 += population[i];
-                else area2 += population[i];
-            }
-
-            visited = new boolean [n + 1];
+    static void dfs(int idx, boolean[] combi, int depth){
+        if(idx == n+1){
+            visited = new boolean[n+1];
             int link = 0;
-            for(int i = 1; i <= n; i++) {
-                if(!visited[i]) {
-                    bfs(i, area[i]);
+            for(int i=1; i<=n; i++){
+                if(!visited[i]){
+                    bfs(i,combi[i] );
                     link++;
                 }
             }
-
-            if(link == 2) min = Math.min(min, Math.abs(area1 - area2));
-
+            if(link ==2){
+                int a = 0;
+                int b=0;
+                for(int i=1; i<=n;i++){
+                    if(combi[i]){
+                        a += people[i];
+                    }else {
+                        b+= people[i];
+                    }
+                }
+                ans = Math.min(ans, Math.abs(a-b));
+            }
+//            System.out.println(Arrays.toString(combi));
             return;
         }
-
-        area[k] = 1;
-        dfs(k + 1);
-
-        area[k] = 2;
-        dfs(k + 1);
+        for(int i=depth; i<=n;i++){
+            combi[i] = true;
+            dfs(idx+1, combi, i+1);
+            combi[i] = false;
+            dfs(idx+1, combi, i+1);
+        }
     }
-
-    public static void bfs(int idx, int areaNum) {
+    static void bfs(int s, boolean area){
         Queue<Integer> q = new LinkedList<>();
-        visited[idx] = true;
-        q.offer(idx);
-
-        while(!q.isEmpty()) {
-            int current = q.poll();
-
-            for(int i = 0; i < list[current].size(); i++) {
-                int next = list[current].get(i);
-                if(area[next] == areaNum && !visited[next]) {
-                    q.offer(next);
+        q.add(s);
+        visited[s] = true;
+        while (!q.isEmpty()){
+            int temp = q.poll();
+            for(int i=0; i<list[temp].size(); i++){
+                int next = list[temp].get(i);
+                if(!visited[next] & combi[next]== area){
                     visited[next] = true;
+                    q.add(next);
                 }
             }
         }
     }
+
 }
