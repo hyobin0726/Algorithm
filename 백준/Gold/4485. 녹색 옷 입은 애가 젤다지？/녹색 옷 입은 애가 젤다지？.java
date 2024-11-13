@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Main{
+public class Main {
 
     static int N,map[][];
     static int dr[] = {-1,1,0,0};
@@ -32,7 +32,7 @@ public class Main{
     static int getMinTime(int sr,int sc, int er,int ec) {
         final int INF = Integer.MAX_VALUE;
         int[][] minTime = new int[N][N];
-        PriorityQueue<int[]> pQueue = new PriorityQueue<>((a,b)->Integer.compare(a[2],b[2]));
+        Queue<int[]> q = new LinkedList<>();
 
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
@@ -41,29 +41,27 @@ public class Main{
         }
 
         minTime[sr][sc] = map[0][0];
-        pQueue.offer(new int[] {sr,sc,minTime[sr][sc]});
+        q.add(new int[] {sr,sc,minTime[sr][sc]});
 
-        while(!pQueue.isEmpty()) {
-            int[] stopOver = pQueue.poll();
+        while(!q.isEmpty()) {
+            int[] stopOver = q.poll();
             int r = stopOver[0];
             int c = stopOver[1];
             int time = stopOver[2];
-
-            if(r==er && c==ec) {
-                return time;
-            }
-
+            
             for (int d = 0; d < 4; d++) {
                 int nr = r + dr[d];
                 int nc = c + dc[d];
                 if(nr>=0 && nr<N && nc>=0 && nc<N && minTime[nr][nc]> time+map[nr][nc]) {
                     minTime[nr][nc] = time+map[nr][nc];
-                    pQueue.offer(new int[] {nr,nc,minTime[nr][nc]});
+                    q.add(new int[] {nr,nc,minTime[nr][nc]});
                 }
             }
         }
-
-        return -1;
+//        if(r==er && c==ec) {
+        return minTime[N-1][N-1];
+//        }
+//        return -1;
     }
 
 }
