@@ -1,69 +1,79 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
 public class Main {
-    static int V,E;
-    static int k;
-    static  class Node{
-        int end , cost;
-        public Node(int end, int cost) {
-            this.end = end;
-            this.cost = cost;
-        }
-    }
+	static int v, e;
+	static class edge implements Comparable<edge>{
+		int to, cost;
 
-    public static void main(String[] args) throws IOException{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        V= Integer.parseInt(st.nextToken());
-        E = Integer.parseInt(st.nextToken());
-        k= Integer.parseInt(br.readLine());
+		public edge( int to, int cost) {
+			super();
+			this.to = to;
+			this.cost = cost;
+		}
 
-        ArrayList<ArrayList<Node>> adlist = new ArrayList<>();
-        for(int i=0; i<V+1; i++){
-            adlist.add(new ArrayList<>());
-        }
-        for(int i=0; i<E;i++){
-            st = new StringTokenizer(br.readLine());
-            int u = Integer.parseInt(st.nextToken());
-            int v= Integer.parseInt(st.nextToken());
-            int w= Integer.parseInt(st.nextToken());
-            adlist.get(u).add(new Node(v,w));
-        }
-        boolean[] visited = new boolean[V+1];
-        int[] mindistance = new int[V+1];
-        for(int i =1; i<V+1; i++){
-            mindistance[i] = Integer.MAX_VALUE;
-        }
-        mindistance[k] = 0;
-//다익스트라
-        for(int i=0; i<V; i++){
-            int nowDisttance = Integer.MAX_VALUE;
-            int idx = 0;
-            for(int j =1; j<V+1; j++){
-                if(!visited[j] && mindistance[j] <nowDisttance ){
-                    nowDisttance = mindistance[j];
-                    idx=j;
-                }
-            }
-            visited[idx] = true;
+		@Override
+		public int compareTo(edge o) {
+			// TODO Auto-generated method stub
+			return this.cost-o.cost;
+		}
+		
+		
+	}
+	static ArrayList<edge>[] edges;
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		v= Integer.parseInt(st.nextToken());
+		e= Integer.parseInt(st.nextToken());
+		int start = Integer.parseInt(br.readLine());
+		edges = new ArrayList[v+1];
+		for(int i=0; i<=v; i++) {
+			edges[i] = new ArrayList<>();
+		}
+		
+		for(int i=0; i<e; i++) {
+			st = new StringTokenizer(br.readLine());
+			int s = Integer.parseInt(st.nextToken());
+			int e = Integer.parseInt(st.nextToken());
+			int c = Integer.parseInt(st.nextToken());
+			edges[s].add(new edge(e,c));
+//			edges[e].add(new edge(s,c));
+		}
+		int[] mincost = new int[v+1];
+		for(int i=0; i<=v; i++) {
+			mincost[i] = Integer.MAX_VALUE;
+		}
+		mincost[start] = 0;
+		PriorityQueue<edge> q = new PriorityQueue<>();
+		q.add(new edge(start, 0));
 
-            for(int j=0; j<adlist.get(idx).size(); j++){
-                Node adNode = adlist.get(idx).get(j);
-
-                if(mindistance[adNode.end] > mindistance[idx] + adNode.cost){
-                    mindistance[adNode.end] = mindistance[idx] + adNode.cost;
-                }
-            }
-        }
-
-        //최종 출력
-        for(int i=1; i<=V; i++){
-            if(mindistance[i] == Integer.MAX_VALUE){
-                System.out.println("INF");
-            }else {
-                System.out.println( mindistance[i]);
-            }
-        }
-
-    }
+		while(!q.isEmpty()) {
+			edge now = q.poll();
+			int a = now.to;
+			if (now.cost > mincost[a]) continue;
+			for(int i =0; i<edges[a].size();i++ ) {
+				 edge next = edges[a].get(i);
+				 if(mincost[next.to] > mincost[a] + next.cost) {
+					 mincost[next.to] =  mincost[a] +next.cost;
+					 q.add(new edge(next.to, mincost[next.to]));
+				 }
+			}
+		}
+		for(int i=1; i<=v; i++) {
+			if(mincost[i] == Integer.MAX_VALUE) {
+				System.out.println("INF");
+			}else {
+				System.out.println(mincost[i]);
+			}
+		}
+	}
+	
 }
